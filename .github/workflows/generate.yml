@@ -13,7 +13,7 @@ jobs:
           repository: "tensorflow/tensorflow"
           path: "tensorflow-master"
 
-      - name: Code transormation
+      - name: Code transformation
         working-directory: "tensorflow-master"
         run: make -f $TFLITE_MICRO_TOOLS generate_hello_world_arduino_project TARGET=arduino TAGS=cmsis-nn
 
