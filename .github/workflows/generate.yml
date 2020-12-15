@@ -13,6 +13,14 @@ jobs:
           repository: "tensorflow/tensorflow"
           path: "tensorflow-master"
 
+      - name: Set Up Python
+        uses: actions/setup-python@v2
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade six
+
       - name: Code transformation
         working-directory: "tensorflow-master"
         run: make -f $TFLITE_MICRO_TOOLS generate_hello_world_arduino_project TARGET=arduino TAGS=cmsis-nn
