@@ -1,0 +1,27 @@
+name: generate-examples
+
+on: [push]
+
+jobs:
+  generate-examples-job:
+    runs-on: ubuntu-18.04
+    env:
+      TFLITE_MICRO_TOOLS: "tensorflow/lite/micro/tools/make/Makefile"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: "tensorflow/tensorflow"
+          path: "tensorflow-master"
+
+      - name: Code transormation
+        working-directory: "tensorflow-master"
+        uses: make -f $TFLITE_MICRO_TOOLS generate_hello_world_arduino_project TARGET=arduino TAGS=cmsis-nn
+
+      - name: Generate ZIP
+        working-directory: "tensorflow-master"
+        uses: make -f $TFLITE_MICRO_TOOLS TARGET=arduino TAGS=cmsis-nn generate_arduino_zip
+
+      - name: List ZIP contents
+        working-directory: "tensorflow-master/tensorflow/lite/micro/tools/make/gen/arduino_x86_64/prj"
+        uses: unzip -l tensorflow_lite.zip
+      
