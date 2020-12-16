@@ -45,8 +45,9 @@ jobs:
         run: |
           git config --global user.name $GH_SERVICE_ACCOUNT_NAME
           git config --global user.email $GH_SERVICE_ACCOUNT_EMAIL
-          echo $GH_SERVICE_ACCOUNT_TOKEN | gh auth login --with-token
-          gh auth status
+
+      - name: GH CLI auth
+        run: echo $GH_SERVICE_ACCOUNT_TOKEN | gh auth login --with-token
 
 
       - name: Copy files to repo, commit and push
