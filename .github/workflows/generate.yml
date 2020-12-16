@@ -9,6 +9,7 @@ jobs:
       TFLITE_MICRO_TOOLS: "tensorflow/lite/micro/tools/make/Makefile"
       GH_SERVICE_ACCOUNT_NAME: "tflite-bot"
       GH_SERVICE_ACCOUNT_EMAIL: "tflite-bot@antmicro.com"
+      GH_SERVICE_ACCOUNT_TOKEN: ${{ secrets.GH_SERVICE_ACCOUNT_TOKEN }}
     steps:
       - name: Clone Tensorflow
         uses: actions/checkout@v2
@@ -48,7 +49,6 @@ jobs:
 
       - name: GH CLI auth
         run: echo $GH_SERVICE_ACCOUNT_TOKEN | gh auth login --with-token
-
 
       - name: Copy files to repo, commit and push
         run: |
