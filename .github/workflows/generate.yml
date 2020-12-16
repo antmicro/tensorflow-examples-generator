@@ -41,14 +41,28 @@ jobs:
       - name: Unzip
         run: unzip tensorflow-master/tensorflow/lite/micro/tools/make/gen/arduino_x86_64/prj/tensorflow_lite.zip
 
+      - name: Configure git
+        run: |
+          git config --global user.name $GH_SERVICE_ACCOUNT_NAME
+          git config --global user.email $GH_SERVICE_ACCOUNT_EMAIL
+          echo $GH_SERVICE_ACCOUNT_TOKEN | gh auth login --with-token
+          gh auth status
+
+
       - name: Copy files to repo, commit and push
         run: |
           export TENSORFLOW_MASTER=$(git -C tensorflow-master rev-parse --short HEAD)
+          export NEW_BRANCH=bot-$(date +%F_%H-%M)
           mkdir -p target_repo/tensorflow
           cp -a tensorflow_lite/. target_repo/tensorflow
           cd target_repo
-          git config --global user.name $GH_SERVICE_ACCOUNT_NAME
-          git config --global user.email $GH_SERVICE_ACCOUNT_EMAIL
+          git checkout -b $NEW_BRANCH
           git add .
-          git commit -m "Update TFLite examples for Arduino from $TENSORFLOW_MASTER"
-          git push https://$GH_SERVICE_ACCOUNT_NAME:$GH_SERVICE_ACCOUNT_TOKEN@github.com/antmicro/tensorflow-arduino-examples.git --all
+
+          if [ -n "$(git status --porcelain)" ]; then
+            git commit -m "Update TFLite examples for Arduino from $TENSORFLOW_MASTER";
+            git push -u https://$GH_SERVICE_ACCOUNT_NAME:$GH_SERVICE_ACCOUNT_TOKEN@github.com/antmicro/tensorflow-arduino-examples.git $NEW_BRANCH
+            gh pr create --fill
+          else
+            echo "no changes";
+          fi
