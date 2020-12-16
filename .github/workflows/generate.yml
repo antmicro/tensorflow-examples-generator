@@ -51,5 +51,4 @@ jobs:
           git config --global user.email $GH_SERVICE_ACCOUNT_EMAIL
           git add .
           git commit -m "Update TFLite examples for Arduino from $TENSORFLOW_MASTER"
-          git --no-pager log --decorate=short --pretty=oneline -n1
-          #git push https://$GH_SERVICE_ACCOUNT_NAME:$GH_SERVICE_ACCOUNT_TOKEN@github.com/antmicro/tensorflow-arduino-examples.git --all
+          git push https://$GH_SERVICE_ACCOUNT_NAME:$GH_SERVICE_ACCOUNT_TOKEN@github.com/antmicro/tensorflow-arduino-examples.git --all
