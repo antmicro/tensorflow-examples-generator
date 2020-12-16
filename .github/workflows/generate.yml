@@ -45,10 +45,11 @@ jobs:
         run: |
           export TENSORFLOW_MASTER=$(git -C tensorflow-master rev-parse --short HEAD)
           mkdir -p target_repo/tensorflow
-          cp tensorflow_lite/* target_repo/tensorflow
+          cp -a tensorflow_lite/. target_repo/tensorflow
           cd target_repo
           git config --global user.name $GH_SERVICE_ACCOUNT_NAME
           git config --global user.email $GH_SERVICE_ACCOUNT_EMAIL
           git add .
-          git status
+          git commit "Update TFLite examples for Arduino from $TENSORFLOW_MASTER"
+          git --no-pager log --decorate=short --pretty=oneline -n1
           #git push https://$GH_SERVICE_ACCOUNT_NAME:$GH_SERVICE_ACCOUNT_TOKEN@github.com/antmicro/tensorflow-arduino-examples.git --all
