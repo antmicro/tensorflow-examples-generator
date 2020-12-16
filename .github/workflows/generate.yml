@@ -22,6 +22,7 @@ jobs:
         with:
           repository: "antmicro/tensorflow-arduino-examples"
           path: "target_repo"
+          token: ${{ secrets.GH_SERVICE_ACCOUNT_TOKEN }}
 
       - name: Set Up Python
         uses: actions/setup-python@v2
