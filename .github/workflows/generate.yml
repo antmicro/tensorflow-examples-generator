@@ -43,7 +43,7 @@ jobs:
         run: make -f $TFLITE_MICRO_TOOLS TARGET=arduino TAGS=cmsis-nn generate_arduino_zip
 
       - name: Unzip
-        run: unzip tensorflow-master/tensorflow/lite/micro/tools/make/gen/arduino_x86_64/prj/tensorflow_lite.zip
+        run: unzip tensorflow-master/tensorflow/lite/micro/tools/make/gen/arduino_x86_64_default/prj/tensorflow_lite.zip
 
       - name: Configure git
         run: |
