@@ -58,7 +58,7 @@ jobs:
           export TENSORFLOW_MASTER=$(git -C tensorflow-master rev-parse --short HEAD)
           export NEW_BRANCH=bot-$(date +%F_%H-%M)
           mkdir -p target_repo/tensorflow
-          cp -a tensorflow_lite/. target_repo/tensorflow
+          rsync -avh --delete tensorflow_lite/ target_repo/tensorflow
           cd target_repo
           git checkout -b $NEW_BRANCH
           git add .
