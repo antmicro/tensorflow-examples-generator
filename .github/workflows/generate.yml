@@ -36,11 +36,11 @@ jobs:
 
       - name: Code transformation
         working-directory: "tensorflow-master"
-        run: make -f $TFLITE_MICRO_TOOLS generate_hello_world_arduino_project TARGET=arduino TAGS=cmsis-nn
+        run: make -f $TFLITE_MICRO_TOOLS generate_hello_world_arduino_project TARGET=arduino OPTIMIZED_KERNEL_DIR=cmsis_nn
 
       - name: Generate ZIP
         working-directory: "tensorflow-master"
-        run: make -f $TFLITE_MICRO_TOOLS TARGET=arduino TAGS=cmsis-nn generate_arduino_zip
+        run: make -f $TFLITE_MICRO_TOOLS TARGET=arduino OPTIMIZED_KERNEL_DIR=cmsis_nn generate_arduino_zip
 
       - name: Unzip
         run: unzip tensorflow-master/tensorflow/lite/micro/tools/make/gen/arduino_x86_64_default/prj/tensorflow_lite.zip
