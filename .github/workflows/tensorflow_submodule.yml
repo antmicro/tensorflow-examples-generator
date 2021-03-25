@@ -19,6 +19,7 @@ jobs:
           repository: "antmicro/tensorflow-zephyr-vexriscv-examples"
           path: "target_repo"
           token: ${{ secrets.GH_SERVICE_ACCOUNT_TOKEN }}
+          submodules: recursive
 
       - name: Configure git
         run: |
