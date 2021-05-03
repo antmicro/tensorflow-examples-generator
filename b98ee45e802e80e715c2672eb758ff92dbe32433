@@ -1,0 +1,16 @@
+{
+    "categories": [
+        "Cloud Systems",
+        "Edge AI & Software"
+    ],
+    "tags": [
+        "renode",
+        "tensorflow",
+        "zephyr",
+        "arduino",
+        "risc-v",
+        "fpga",
+        "ai",
+        "edge-ai"
+    ]
+}
