@@ -14,10 +14,10 @@ jobs:
       GH_SERVICE_ACCOUNT_EMAIL: "tflite-bot@antmicro.com"
       GH_SERVICE_ACCOUNT_TOKEN: ${{ secrets.GH_SERVICE_ACCOUNT_TOKEN }}
     steps:
-      - name: Clone Tensorflow
+      - name: Clone Tensorflow Lite Micro
         uses: actions/checkout@v2
         with:
-          repository: "tensorflow/tensorflow"
+          repository: "tensorflow/tflite-micro"
           path: "tensorflow-master"
 
       - name: Clone target repository
@@ -58,8 +58,8 @@ jobs:
         run: |
           export TENSORFLOW_MASTER=$(git -C tensorflow-master rev-parse --short HEAD)
           export NEW_BRANCH=bot-$(date +%F_%H-%M)
-          mkdir -p target_repo/tensorflow
-          rsync -avh --delete tensorflow_lite/ target_repo/tensorflow
+          mkdir -p target_repo/tflite-micro
+          rsync -avh --delete tensorflow_lite/ target_repo/tflite-micro
           cd target_repo
           git checkout -b $NEW_BRANCH
           git add .
