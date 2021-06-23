@@ -45,7 +45,7 @@ jobs:
             git commit -m "Update Tensorflow Lite Micro to $TENSORFLOW_MASTER";
             git push -u https://$GH_SERVICE_ACCOUNT_NAME:$GH_SERVICE_ACCOUNT_TOKEN@github.com/antmicro/tensorflow-zephyr-vexriscv-examples.git $NEW_BRANCH
             gh pr create --fill --head $NEW_BRANCH
-            gh pr merge --auto --delete-branch
+            gh pr merge --auto --rebase --delete-branch
             gh pr review --approve
           else
             echo "no changes";
