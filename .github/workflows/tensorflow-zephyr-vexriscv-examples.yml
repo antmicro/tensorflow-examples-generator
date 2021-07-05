@@ -1,4 +1,4 @@
-name: update-tensorflow
+name: tensorflow-zephyr-vexriscv-examples
 
 on:
   schedule:
