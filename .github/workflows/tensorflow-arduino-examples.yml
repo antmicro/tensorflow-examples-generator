@@ -10,42 +10,16 @@ jobs:
   generate-examples-job:
     runs-on: ubuntu-18.04
     env:
-      TFLITE_MICRO_TOOLS: "tensorflow/lite/micro/tools/make/Makefile"
       GH_SERVICE_ACCOUNT_NAME: "tflite-bot"
       GH_SERVICE_ACCOUNT_EMAIL: "tflite-bot@antmicro.com"
       GH_SERVICE_ACCOUNT_TOKEN: ${{ secrets.GH_SERVICE_ACCOUNT_TOKEN }}
     steps:
-      - name: Clone Tensorflow Lite Micro
-        uses: actions/checkout@v2
-        with:
-          repository: "tensorflow/tflite-micro"
-          path: "tensorflow-master"
-
       - name: Clone target repository
         uses: actions/checkout@v2
         with:
           repository: "antmicro/tensorflow-arduino-examples"
           path: "target_repo"
           token: ${{ secrets.GH_SERVICE_ACCOUNT_TOKEN }}
-
-      - name: Set Up Python
-        uses: actions/setup-python@v2
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install --upgrade six
-
-      - name: Code transformation
-        working-directory: "tensorflow-master"
-        run: make -f $TFLITE_MICRO_TOOLS generate_hello_world_arduino_project TARGET=arduino OPTIMIZED_KERNEL_DIR=cmsis_nn
-
-      - name: Generate ZIP
-        working-directory: "tensorflow-master"
-        run: make -f $TFLITE_MICRO_TOOLS TARGET=arduino OPTIMIZED_KERNEL_DIR=cmsis_nn generate_arduino_zip
-
-      - name: Unzip
-        run: unzip tensorflow-master/tensorflow/lite/micro/tools/make/gen/arduino_x86_64_default/prj/tensorflow_lite.zip
 
       - name: Configure git
         run: |
@@ -55,21 +29,25 @@ jobs:
       - name: GH CLI auth
         run: echo $GH_SERVICE_ACCOUNT_TOKEN | gh auth login --with-token
 
-      - name: Copy files to repo, commit and push
+      - name: Bump 'tflite-micro-arduino-examples', commit and push
         run: |
-          export TENSORFLOW_MASTER=$(git -C tensorflow-master rev-parse --short HEAD)
-          export NEW_BRANCH=bot-$(date +%F_%H-%M)
-          mkdir -p target_repo/tflite-micro
-          rsync -avh --delete tensorflow_lite/ target_repo/tflite-micro
           cd target_repo
+          git submodule update --init
+          export NEW_BRANCH=bot-$(date +%F_%H-%M)
           git checkout -b $NEW_BRANCH
+          pushd tflite-micro
+          git checkout main
+          git pull
+          export SUBMODULE_MASTER=$(git rev-parse --short HEAD)
+          popd
           git add .
 
           if [ -n "$(git status --porcelain)" ]; then
-            git commit -m "Update TFLite examples for Arduino from $TENSORFLOW_MASTER";
+            git commit -m "Update 'tensorflow/tflite-micro-arduino-examples' to $SUBMODULE_MASTER";
             git push -u https://$GH_SERVICE_ACCOUNT_NAME:$GH_SERVICE_ACCOUNT_TOKEN@github.com/antmicro/tensorflow-arduino-examples.git $NEW_BRANCH
             gh pr create --fill --head $NEW_BRANCH
             gh pr merge --auto --rebase --delete-branch
           else
             echo "no changes";
           fi
+
